@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from chat import views 
+from django.views.generic import TemplateView
+from django.urls import re_path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('chat.urls')),
     path('', views.index, name='index'),
-    path('api/clear_chat/', views.clear_chat, name='clear_chat')
+    path('api/clear_chat/', views.clear_chat, name='clear_chat'),
+    re_path(r'^.*', TemplateView.as_view(template_name='chat/index.html'))
 ]

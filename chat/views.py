@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 import openai
-import torch
+
 from rest_framework.response import Response
 from rest_framework import viewsets
-from transformers import pipeline
+
 from .models import Message
 from .serializers import MessageSerializer
 
-openai.api_key = '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'
+openai.api_key = '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'
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
