@@ -8,7 +8,7 @@ from rest_framework import viewsets
 from .models import Message
 from .serializers import MessageSerializer
 
-openai.api_key = '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'
+openai.api_key = 'YOURAPIKEY'
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
