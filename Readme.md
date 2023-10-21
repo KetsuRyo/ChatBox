@@ -24,8 +24,7 @@ Chatbox is a Django-based online chat website that leverages the OpenAI GPT-turb
    - Navigate to `chat/views.py`.
    - Set your OpenAI API key and specify the model you want to use:
      ```python
-     OPENAI_API_KEY = 'your-openai-api-key'
-     OPENAI_MODEL = 'gpt-turbo-3.5'
+     OPENAI_API_KEY = "YOURAPIKEY"
      ```
 
 3. **Run the Server:**
