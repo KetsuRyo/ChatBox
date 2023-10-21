@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbox</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- 自定义样式 -->
+    <style>
+        #messages {
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;  /* 添加圆角 */
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;  /* 背景色 */
+        }
+
+
+        .message {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            max-width: calc(100% - 40px);  /* 确保消息框不超过其容器的宽度，减去的40px是为了容纳margin和padding */
+        }
+
+        .user-message,
+        .bot-message {
+            display: block;  /* 使每个消息的容器成为块级元素 */
+        }
+
+        .user-message {
+            background-color: #e6f7ff;
+            text-align: right;
+            margin-right: 20px;
+        }
+
+        .bot-message {
+            background-color: #d9f7be;
+        }
+
+
+
+
+    </style>
+</head>
+<body class="container">  <!-- 添加 container 类以适应不同屏幕尺寸 -->
+    <header class="mb-4">  <!-- 添加header元素，mb-4是Bootstrap的类，用于添加下边距 -->
+        <h1 class="text-center">Chatbox</h1>  <!-- 使用h1元素添加标题文本 -->
+        <input type="text" id="searchInput" class="form-control" placeholder="Search messages" oninput="updateMessages()">  <!-- 添加搜索框 -->
+    </header>
+    <div id="messages" class="mb-3"></div>  <!-- 使用 Bootstrap 的 margin 类 -->
+    <div class="input-group mb-3">  <!-- 使用 Bootstrap 的输入组样式 -->
+        <input type="text" id="messageInput" class="form-control" placeholder="Type a message" aria-label="Message" aria-describedby="button-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <button class="btn btn-danger" onclick="clearChat()">Clear Chat</button>  <!-- 使用 Bootstrap 的按钮样式 -->
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function updateMessages() {
+            var searchQuery = $('#searchInput').val().toLowerCase();  // 获取搜索查询并转换为小写
+
+            $.ajax({
+                url: '/api/messages/',
+                method: 'GET',
+                success: function(data) {
+                    var messagesDiv = $('#messages');
+                    messagesDiv.empty();
+
+                    data.forEach(function(message, index) {
+                        var messageContent = message.content.toLowerCase();  // 将消息内容转换为小写
+                        var messageResponse = message.response ? message.response.toLowerCase() : '';  // 将机器人的回应转换为小写
+
+                        // 如果搜索查询为空或消息内容/回应包含搜索查询，则显示消息
+                        if (!searchQuery || messageContent.includes(searchQuery) || messageResponse.includes(searchQuery)) {
+                            var messageDiv = $('<div></div>');
+                            var userMessageClass = 'user-message message';
+                            messageDiv.append('<div class="' + userMessageClass + '">' + message.content + '</div>');
+
+                            if (message.response) {
+                                var botMessageClass = 'bot-message message';
+                                messageDiv.append('<div class="' + botMessageClass + '">' + message.response + '</div>');
+                            }
+
+                            messagesDiv.append(messageDiv);
+                        }
+                    });
+
+                    messagesDiv.scrollTop(messagesDiv[0].scrollHeight);
+                }
+            });
+        }
+
+
+
+
+        function clearChat() {
+            $.ajax({
+                url: '/api/clear_chat/',  // 這是我們稍後將創建的新API端點
+                method: 'POST',
+                success: function() {
+                    updateMessages();  // 清空聊天記錄後更新消息列表
+                }
+            });
+        }
+
+        function sendMessage() {
+            var messageContent = $('#messageInput').val();
+            if (messageContent) {
+                $.ajax({
+                    url: '/api/messages/',  // 確保這個 URL 路徑匹配你的 Django API 端點
+                    method: 'POST',
+                    data: JSON.stringify({ content: messageContent }),
+                    contentType: 'application/json',
+                    success: function() {
+                        $('#messageInput').val('');
+                        updateMessages();
+                    }
+                });
+            }
+        }
+
+        // 初始化時，更新消息
+        updateMessages();
+        // 每5秒更新一次消息，以保持實時更新
+        setInterval(updateMessages, 5000);
+    </script>
+</body>
+</html>
