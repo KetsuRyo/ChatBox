@@ -1,6 +1,9 @@
 # Chatbox - An Online Chat Website
 
 Chatbox is a Django-based online chat website that leverages the OpenAI GPT-turbo-3.5 model to provide interactive conversations. It also connects to a Google Cloud MySQL database for data persistence.
+## Live Demo
+
+Experience the live demo of Chatbox at [http://www.jackliaomatsuyama.org:8080/](http://www.jackliaomatsuyama.org:8080/).
 
 ## Setup
 
@@ -24,8 +27,11 @@ Chatbox is a Django-based online chat website that leverages the OpenAI GPT-turb
    - Navigate to `chat/views.py`.
    - Set your OpenAI API key and specify the model you want to use:
      ```python
-     OPENAI_API_KEY = "YOURAPIKEY"
+     openai.api_key = 'your-openai-api-key'
+     res = openai.ChatCompletion.create(
+            model="MODEL_YOU_WANT_TO_USE",
      ```
+
 
 3. **Run the Server:**
    - Execute the following command to start the Django server:
