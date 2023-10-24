@@ -3,7 +3,7 @@
 Chatbox is a Django-based online chat website that leverages the OpenAI GPT-turbo-3.5 model to provide interactive conversations. It also connects to a Google Cloud MySQL database for data persistence.
 ## Live Demo
 
-Experience the live demo of Chatbox at [http://www.jackliaomatsuyama.org:8080/](http://www.jackliaomatsuyama.org:8080/).
+Experience the live demo of Chatbox at [http://www.jackliaomatsuyama.org:8864/](http://www.jackliaomatsuyama.org:8864/).
 
 ## Setup
 
